@@ -18,12 +18,12 @@ Vec2.prototype.subtract = function(x, y) {
 	this.y -= y;
 }
 
-Vec2.prototype.multiplyScalar(num) {
+Vec2.prototype.multiplyScalar = function(num) {
 	this.x = this.x * num;
 	this.y = this.y * num;
 }
 
-Vec2.prototype.normalize() {
+Vec2.prototype.normalize = function() {
 	
 }
 
