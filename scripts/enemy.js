@@ -1,4 +1,8 @@
-var Player = function() {
+/***********************************************
+				Enemy Object
+***********************************************/
+
+var Enemy = function() {
 	this.image = document.createElement("img");
 	this.x = canvas.width/2;
 	this.y = canvas.height/2;
@@ -7,20 +11,13 @@ var Player = function() {
 	this.image.src = "hero.png";
 };
 
-Player.prototype.update = function(deltaTime)
+Enemy.prototype.update = function(deltaTime)
 {
 	if( typeof(this.rotation) == "undefined" )
 	this.rotation = 0;
-
-	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true) {
-		this.rotation -= deltaTime;
-	}
-	else {
-		this.rotation += deltaTime;
-	}
 }
 
-Player.prototype.draw = function()
+Enemy.prototype.draw = function()
 {
 	context.save();
 	context.translate(this.x, this.y);

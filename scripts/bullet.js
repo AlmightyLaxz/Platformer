@@ -1,20 +1,22 @@
-var Enemy = function() {
+/***********************************************
+				Bullet Object
+***********************************************/
+
+var Bullet = function() {
 	this.image = document.createElement("img");
 	this.x = canvas.width/2;
 	this.y = canvas.height/2;
 	this.width = 159;
 	this.height = 163;
-	this.image.src = "hero.png";
+	this.image.src = "art/bullet.png";
 };
 
-Enemy.prototype.update = function(deltaTime)
-{
+Bullet.prototype.update = function(deltaTime) {
 	if( typeof(this.rotation) == "undefined" )
 	this.rotation = 0;
 }
 
-Enemy.prototype.draw = function()
-{
+Bullet.prototype.draw = function() {
 	context.save();
 	context.translate(this.x, this.y);
 	context.rotate(this.rotation);
