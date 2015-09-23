@@ -4,8 +4,8 @@
 
 var Bullet = function() {
 	this.image = document.createElement("img");
-	this.x = player.position.x + 140;
-	this.y = player.position.y + 100;
+	this.x = player.position.x + 100;
+	this.y = player.position.y + 75;
 	this.width = 159;
 	this.height = 163;
 	this.image.src = "art/bullet.png";

@@ -11,8 +11,8 @@ var Player = function() {
 	this.offset = new Vec2();
 	this.offset.set(-55, 87);
 	
-	this.width = 159;
-	this.height = 163;
+	this.width = 35;
+	this.height = 35;
 	this.image.src = "art/hero.png";
 	this.velocity = new Vec2();
 	
@@ -23,8 +23,11 @@ var Player = function() {
 };
 
 Player.prototype.shoot = function() {
-	var bullet = new Bullet();
-	bullets.push(bullet);
+	if (shootTimer <= 0) {
+		var bullet = new Bullet();
+		bullets.push(bullet);
+		shootTimer = 0.15;
+	}
 }
 
 Player.prototype.left = function(deltaTime) {
@@ -40,6 +43,9 @@ Player.prototype.update = function(deltaTime)
 	var left = false;
 	var right = false;
 	var jump = false;
+	
+	shootTimer -= deltaTime;
+	
 	// check keypress events
 	if(keyboard.isKeyDown(keyboard.KEY_A) == true) {
 	left = true;

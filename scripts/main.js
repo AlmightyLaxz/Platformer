@@ -26,6 +26,12 @@ var TILESET_SPACING = 2;
 var TILESET_COUNT_X = 14;
 var TILESET_COUNT_Y = 14;
 
+var STATE_SPLASH = 0;
+var STATE_GAME = 1;
+var STATE_GAMEOVER = 2;
+
+var gameState = STATE_SPLASH;
+
 var PLAYER_SPEED = 1;
 var BULLET_SPEED = 4;
 
@@ -36,11 +42,11 @@ var GRAVITY = METER * 9.8 * 6;
  // max horizontal speed (10 tiles per second)
 var MAXDX = METER * 10;
  // max vertical speed (15 tiles per second)
-var MAXDY = METER * 15;
+var MAXDY = METER * 150;
  // horizontal acceleration - take 1/2 second to reach maxdx
-var ACCEL = MAXDX * 2;
+var ACCEL = MAXDX * 4;
  // horizontal friction - take 1/6 second to stop from maxdx
-var FRICTION = MAXDX * 6;
+var FRICTION = MAXDX * 10;
  // (a large) instantaneous jump impulse
 var JUMP = METER * 1500;
 
@@ -52,7 +58,7 @@ var fpsTime = 0;
 var player = new Player();
 var keyboard = new Keyboard();
 
-//TODO
+var shootTimer = 0;
 
 var bullets = [];
 var enemies = [];
@@ -108,6 +114,19 @@ function initialize() {
 }
 
 /***********************************************
+				Game State Handling
+***********************************************/
+function runSplash() {
+	
+}
+function runGame() {
+	
+}
+function runGameOver() {
+	
+}
+
+/***********************************************
 				Main Function
 				Run at 60 FPS
 ***********************************************/
@@ -146,6 +165,18 @@ function main()
 	for (var x=0; x<enemies.length; x++) {
 		enemies[x].update(deltaTime);
 		enemies[x].draw();
+	}
+	
+	switch(gameState) {
+		case STATE_SPLASH:
+			runSplash();
+			break;
+		case STATE_GAME:
+			runGame();
+			break;
+		case STATE_GAMEOVER:
+			runGameOver();
+			break;
 	}
 		
 	// draw the FPS
