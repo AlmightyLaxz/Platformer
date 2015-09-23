@@ -8,7 +8,7 @@ var Enemy = function() {
 	this.y = canvas.height/2;
 	this.width = 159;
 	this.height = 163;
-	this.image.src = "hero.png";
+	this.image.src = "art/hero.png";
 };
 
 Enemy.prototype.update = function(deltaTime)

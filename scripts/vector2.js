@@ -27,8 +27,8 @@ Vec2.prototype.multiplyScalar = function(num) {
 	this.y = this.y * num;
 }
 
-Vec2.prototype.normalize = function() {
-	
+Vec2.prototype.normalize = function(x, y) {
+	return Math.sqrt((x * x) + (y * y))
 }
 
 var position = new Vec2();

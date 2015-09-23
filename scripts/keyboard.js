@@ -6,7 +6,7 @@ var Keyboard = function() {
 	var self = this;
 	
 	window.addEventListener("keydown", function(evt){self.onKeyDown(evt);}, false);
-	window.addEventListener("keyup", function(evt){self.onKeyDown(evt);}, false);
+	window.addEventListener("keyup", function(evt){self.onKeyUp(evt);}, false);
 	
 	this.keyListeners = new Array();
 	this.keys = new Array();
