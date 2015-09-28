@@ -15,9 +15,9 @@ var SCREEN_HEIGHT = canvas.height;
 
 // Map related constants
 var LAYER_COUNT = 2;
-//var LAYER_BACKGROUND = 0;
-var LAYER_PLATFORMS = 0;
-var LAYER_LADDERS = 1;
+var LAYER_BACKGROUND = 0;
+var LAYER_PLATFORMS = 1;
+var LAYER_LADDERS = 2;
 var MAP = {tw:60, th:15};
 var TILE = 35;
 var TILESET_TILE = TILE * 2;
@@ -32,8 +32,12 @@ var STATE_GAMEOVER = 2;
 
 var gameState = STATE_SPLASH;
 
+var splashTimer = 2;
+
+var debugCollisions = false;
+
 var PLAYER_SPEED = 1;
-var BULLET_SPEED = 4;
+var BULLET_SPEED = 6;
 
  // abitrary choice for 1m
 var METER = TILE;
@@ -114,19 +118,6 @@ function initialize() {
 }
 
 /***********************************************
-				Game State Handling
-***********************************************/
-function runSplash() {
-	
-}
-function runGame() {
-	
-}
-function runGameOver() {
-	
-}
-
-/***********************************************
 				Main Function
 				Run at 60 FPS
 ***********************************************/
@@ -138,54 +129,50 @@ function main()
 	
 	var deltaTime = getDeltaTime();
 	
-	player.update(deltaTime);
-	player.draw();
-	drawMap();
-	
-	// update the frame counter 
-	fpsTime += deltaTime;
-	fpsCount++;
-	if(fpsTime >= 1)
-	{
-		fpsTime -= 1;
-		fps = fpsCount;
-		fpsCount = 0;
-	}
-	
-	for (var x=0; x<bullets.length; x++) {
-		if (bullets[x].alive == true) {
-			bullets[x].update(deltaTime);
-			bullets[x].draw();
-		}
-		else {
-			bullets.splice(x, 1)
-		}
-	}
-	
-	for (var x=0; x<enemies.length; x++) {
-		enemies[x].update(deltaTime);
-		enemies[x].draw();
-	}
-	
 	switch(gameState) {
 		case STATE_SPLASH:
-			runSplash();
+			runSplash(deltaTime);
 			break;
 		case STATE_GAME:
-			runGame();
+			runGame(deltaTime);
 			break;
 		case STATE_GAMEOVER:
-			runGameOver();
+			runGameOver(deltaTime);
 			break;
 	}
-		
-	// draw the FPS
-	context.fillStyle = "#f00";
-	context.font="14px Arial";
-	context.fillText("FPS: " + fps, 5, 20, 100);
+	drawFPS(deltaTime)
 }
 
 initialize();
+
+/***********************************************
+					Debug
+***********************************************/
+function debugCollisionsMode() {
+	// draw the player collisions
+	context.fillStyle = "#FF0";
+	context.fillRect(player.position.x, player.position.y, TILE, TILE);
+
+	// draw the collision map
+	context.fillStyle = "#f00";
+	for (var i = 0; i < cells.length; ++i) {
+		if (i != 1) continue;
+		var layer = cells[i];
+		for (var y = 0; y < layer.length; ++y) {
+			var row = layer[y];
+			for (var x = 0; x < row.length; ++x) {
+				var cell = row[x];
+				if (cell) {
+					context.fillRect(x * TILE - 1, y * TILE - 1, TILE - 2, TILE - 2);
+				}
+			}
+		}
+	}
+	
+	for (var i = 0; i < bullets.length; ++i) {
+		context.fillRect(bullets[i].position.x, bullets[i].position.y, TILE, TILE);
+	}
+}
 
 /***********************************************
 					Framework

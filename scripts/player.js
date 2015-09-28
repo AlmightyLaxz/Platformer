@@ -11,15 +11,16 @@ var Player = function() {
 	this.offset = new Vec2();
 	this.offset.set(-55, 87);
 	
-	this.width = 35;
-	this.height = 35;
+	this.width = 130;
+	this.height = 180;
 	this.image.src = "art/hero.png";
 	this.velocity = new Vec2();
 	
 	this.falling = true;
 	this.jumping = false;
-	
+	this.canjump = true;
 	this.shooting = false;
+	this.alive = true;
 };
 
 Player.prototype.shoot = function() {
@@ -47,14 +48,19 @@ Player.prototype.update = function(deltaTime)
 	shootTimer -= deltaTime;
 	
 	// check keypress events
+	if(keyboard.isKeyUp(keyboard.KEY_W) == true) {
+		this.canjump = true;
+	}
+	
 	if(keyboard.isKeyDown(keyboard.KEY_A) == true) {
 	left = true;
 	}
 	if(keyboard.isKeyDown(keyboard.KEY_D) == true) {
 	right = true;
 	}
-	if(keyboard.isKeyDown(keyboard.KEY_W) == true) {
+	if(keyboard.isKeyDown(keyboard.KEY_W) == true && this.canjump == true && this.jumping == false) {
 	jump = true;
+	this.canjump = false;
 	}
 
 	var wasleft = this.velocity.x < 0;
