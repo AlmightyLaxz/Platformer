@@ -3,17 +3,31 @@
 ***********************************************/
 
 var Player = function() {
-	this.image = document.createElement("img");
+	this.sprite = new Sprite("art/ChuckNorris.png");
+	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
+		[0, 1, 2, 3, 4, 5, 6, 7]);
+	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
+		[8, 9, 10, 11, 12]);
+	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
+		[13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]);
+	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
+		[52, 53, 54, 55, 56, 57, 58, 59]);
+	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
+		[60, 61, 62, 63, 64]);
+	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
+		[65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78]);
+	for(var i=0; i<ANIM_MAX; i++)
+	{
+		this.sprite.setAnimationOffset(i, -55, -87);
+	}
+
 	
 	this.position = new Vec2();
 	this.position.set(9*TILE, 0*TILE);
 	
-	this.offset = new Vec2();
-	this.offset.set(-55, 87);
+	this.width = 159;
+	this.height = 163;
 	
-	this.width = 130;
-	this.height = 180;
-	this.image.src = "art/hero.png";
 	this.velocity = new Vec2();
 	
 	this.falling = true;
@@ -21,6 +35,7 @@ var Player = function() {
 	this.canjump = true;
 	this.shooting = false;
 	this.alive = true;
+	this.direction = LEFT;
 };
 
 Player.prototype.shoot = function() {
@@ -41,6 +56,7 @@ Player.prototype.right = function(deltaTime) {
 
 Player.prototype.update = function(deltaTime)
 {
+	this.sprite.update(deltaTime);
 	var left = false;
 	var right = false;
 	var jump = false;
@@ -54,13 +70,34 @@ Player.prototype.update = function(deltaTime)
 	
 	if(keyboard.isKeyDown(keyboard.KEY_A) == true) {
 	left = true;
+	this.direction = LEFT;
+	if(this.sprite.currentAnimation != ANIM_WALK_LEFT && this.jumping == false) {this.sprite.setAnimation(ANIM_WALK_LEFT);}
 	}
-	if(keyboard.isKeyDown(keyboard.KEY_D) == true) {
+	else if(keyboard.isKeyDown(keyboard.KEY_D) == true) {
 	right = true;
+	this.direction = RIGHT;
+	if(this.sprite.currentAnimation != ANIM_WALK_RIGHT && this.jumping == false) {this.sprite.setAnimation(ANIM_WALK_RIGHT);}
 	}
+	else {
+		if(this.jumping == false && this.falling == false) {
+			if(this.direction == LEFT) {
+				if(this.sprite.currentAnimation != ANIM_IDLE_LEFT) {this.sprite.setAnimation(ANIM_IDLE_LEFT);}
+			}
+			else if(this.sprite.currentAnimation != ANIM_IDLE_RIGHT) {
+				this.sprite.setAnimation(ANIM_IDLE_RIGHT);
+			}
+		}
+	}
+	
 	if(keyboard.isKeyDown(keyboard.KEY_W) == true && this.canjump == true && this.jumping == false) {
 	jump = true;
 	this.canjump = false;
+	if(left == true) {
+		this.sprite.setAnimation(ANIM_JUMP_LEFT);
+	}
+	if(right == true) {
+		this.sprite.setAnimation(ANIM_JUMP_RIGHT);
+	}
 	}
 
 	var wasleft = this.velocity.x < 0;
@@ -79,8 +116,12 @@ Player.prototype.update = function(deltaTime)
 	ddx = ddx - FRICTION; // player was going right, but not any more
 	if (jump && !this.jumping && !falling)
 	{
-	ddy = ddy - JUMP; // apply an instantaneous (large) vertical impulse
-	this.jumping = true;
+		ddy = ddy - JUMP; // apply an instantaneous (large) vertical impulse
+		this.jumping = true;
+		if(this.direction == LEFT)
+			this.sprite.setAnimation(ANIM_JUMP_LEFT);
+		else
+			this.sprite.setAnimation(ANIM_JUMP_RIGHT);
 	}
 	// calculate the new position and velocity:
 	this.position.y = Math.floor(this.position.y + (deltaTime * this.velocity.y));
@@ -89,14 +130,14 @@ Player.prototype.update = function(deltaTime)
 	this.velocity.y = bound(this.velocity.y + (deltaTime * ddy), -MAXDY, MAXDY);
 	
 	if ((wasleft && (this.velocity.x > 0)) ||
-	(wasright && (this.velocity.x < 0)))
+		(wasright && (this.velocity.x < 0)))
 	{
 		// clamp at zero to prevent friction from making us jiggle side to side
 		this.velocity.x = 0;
 	}
 	
 	if (keyboard.isKeyDown(keyboard.KEY_SPACE) == true) {
-		if (Player.shooting == false) {this.shoot(); Player.shooting = true;}
+		if (Player.shooting == false) {this.shoot(); Player.shooting = true; sfxFire.play();}
 	}
 	else {
 		Player.shooting = false;
@@ -163,9 +204,5 @@ Player.prototype.update = function(deltaTime)
 
 Player.prototype.draw = function()
 {
-	context.save();
-	context.translate(this.position.x, this.position.y);
-	context.rotate(this.rotation);
-	context.drawImage(this.image, -this.width/2, -this.height/2);
-	context.restore();
+	this.sprite.draw(context, this.position.x, this.position.y);
 }

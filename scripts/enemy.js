@@ -13,8 +13,7 @@ var Enemy = function() {
 
 Enemy.prototype.update = function(deltaTime)
 {
-	if( typeof(this.rotation) == "undefined" )
-	this.rotation = 0;
+	
 }
 
 Enemy.prototype.draw = function()

@@ -29,7 +29,6 @@ var TILESET_COUNT_Y = 14;
 var STATE_SPLASH = 0;
 var STATE_GAME = 1;
 var STATE_GAMEOVER = 2;
-
 var gameState = STATE_SPLASH;
 
 var splashTimer = 2;
@@ -54,9 +53,23 @@ var FRICTION = MAXDX * 10;
  // (a large) instantaneous jump impulse
 var JUMP = METER * 1500;
 
+var LEFT = 0;
+var RIGHT = 1;
+
+var ANIM_IDLE_LEFT = 0;
+var ANIM_JUMP_LEFT = 1;
+var ANIM_WALK_LEFT = 2;
+var ANIM_IDLE_RIGHT = 3;
+var ANIM_JUMP_RIGHT = 4;
+var ANIM_WALK_RIGHT = 5;
+var ANIM_MAX = 6;
+
 var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
+
+var musicBackground;
+var sfxFire;
 
 // Built from classes
 var player = new Player();
@@ -115,6 +128,24 @@ function initialize() {
 			}
 		}
 	}
+	musicBackground = new Howl(
+	{
+		urls: ["sound/background.ogg"],
+		loop: true,
+		buffer: true,
+		volume: 0.5
+	} );
+		musicBackground.play();
+		sfxFire = new Howl(
+	{
+		urls: ["sound/fireEffect.ogg"],
+		buffer: true,
+		volume: 1,
+		onend: function() {
+		isSfxPlaying = false;
+	}
+	} );
+
 }
 
 /***********************************************
@@ -169,8 +200,9 @@ function debugCollisionsMode() {
 		}
 	}
 	
+	context.fillStyle = "#7FFF00";
 	for (var i = 0; i < bullets.length; ++i) {
-		context.fillRect(bullets[i].position.x, bullets[i].position.y, TILE, TILE);
+		context.fillRect(bullets[i].position.x, bullets[i].position.y, 10, 10);
 	}
 }
 

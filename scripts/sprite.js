@@ -76,7 +76,7 @@ Sprite.prototype.buildAnimation = function(frameXCount, frameYCount, frameW, fra
 	}
 	
 	this.animations.push(animation);
-	this.offsets.push( new Vector2() );
+	this.offsets.push( new Vec2() );
 };
 
 Sprite.prototype.isFinished = function()

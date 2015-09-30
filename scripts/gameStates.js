@@ -3,9 +3,14 @@
 ***********************************************/
 
 // Splash Screen
+var splash = [];
+
 function runSplash(deltaTime) {
-	context.fillStyle = "#ccc";
-	context.fillRect(0, 0, canvas.width, canvas.height);
+	splash.image = document.createElement("img");
+	splash.image.src = "art/bullet.png";
+	context.save();
+	context.drawImage(splash.image, 0, 0);
+	context.restore();
 	if (splashTimer > 0) {splashTimer -= deltaTime;}
 	else {gameState = STATE_GAME;}
 }
@@ -13,8 +18,11 @@ function runSplash(deltaTime) {
 // Function for running game
 function runGame(deltaTime) {
 	player.update(deltaTime);
-	player.draw();
-	drawMap();
+	if(debugCollisions == false) {
+		player.draw();
+		drawMap();
+		enemy.draw();
+	}
 	
 	for (var x=0; x<bullets.length; x++) {
 		if (bullets[x].alive == true) {
