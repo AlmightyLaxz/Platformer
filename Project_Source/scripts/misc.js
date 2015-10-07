@@ -1,8 +1,12 @@
+/***********************************************
+					Draw FPS
+***********************************************/
+
 function drawFPS(deltaTime) {
 	// draw the FPS
 	context.fillStyle = "#f00";
 	context.font="14px Arial";
-	context.fillText("FPS: " + fps, 5, 20, 100);
+	context.fillText("FPS: " + fps, 580, 20, 100);
 	
 	// update the frame counter 
 	fpsTime += deltaTime;

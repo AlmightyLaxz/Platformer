@@ -36,6 +36,8 @@ var Player = function() {
 	this.shooting = false;
 	this.alive = true;
 	this.direction = LEFT;
+	this.lives = 3;
+	this.score = 0;
 };
 
 Player.prototype.shoot = function() {
@@ -137,7 +139,7 @@ Player.prototype.update = function(deltaTime)
 	}
 	
 	if (keyboard.isKeyDown(keyboard.KEY_SPACE) == true) {
-		if (Player.shooting == false) {this.shoot(); Player.shooting = true; sfxFire.play();}
+		this.shoot(); Player.shooting = true; sfxFire.play();
 	}
 	else {
 		Player.shooting = false;

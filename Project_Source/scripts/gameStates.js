@@ -12,7 +12,7 @@ function runSplash(deltaTime) {
 	context.drawImage(splash.image, 0, 0);
 	context.restore();
 	if (splashTimer > 0) {splashTimer -= deltaTime;}
-	else {gameState = STATE_GAME;}
+	else {gameState = STATE_GAME; splashTimer = 2;}
 }
 
 // Function for running game
@@ -51,10 +51,17 @@ function runGame(deltaTime) {
 		debugCollisionsMode();
 	}
 	
+	// player death handling
 	if (player.alive == false) {
-		gameState = STATE_GAMEOVER;
+		player.lives--;
+		if (player.lives < 1) {gameState = STATE_GAMEOVER;}
+		else {player.position.set(9*TILE, 0*TILE); player.alive = true;}
 	}
+	
+	// falling off the map == death
 	if (player.position.y > 800) {player.alive = false;}
+	
+	drawHUD();
 }
 
 // Game over function

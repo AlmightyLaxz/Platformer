@@ -45,13 +45,32 @@ function bound(value, min, max)
 var tileset = document.createElement("img");
 tileset.src = "art/platforms-tileset.png";
 
+var worldOffsetX = 0;
+
 function drawMap()
 {
+	var startX = -1;
+	var maxTiles = (SCREEN_WIDTH / TILE) + 2;
+	var tileX = pixelToTile(player.position.x);
+	var offsetX = TILE + (player.position.x - tileToPixel(tileX));
+	
+	startX = tileX - ((SCREEN_WIDTH / TILE) / 2);
+	
+	if(startX < -1) {
+		startX = -1;
+		offsetX = TILE;
+	}
+	if(startX > MAP.tw - maxTiles) {
+		startX = MAP.tw - maxTiles + 1;
+		offsetX = TILE;
+	}
+	worldOffsetX = startX * TILE + offsetX;
+
 	for(var layerIdx=0; layerIdx<LAYER_COUNT; layerIdx++)
 	{
-		var idx = 0;
 		for( var y = 0; y < level1.layers[layerIdx].height; y++ )
 		{
+			var idx = y * level1.layers[layerIdx].width + startX;
 			for( var x = 0; x < level1.layers[layerIdx].width; x++ )
 			{
 				if( level1.layers[layerIdx].data[idx] != 0 )

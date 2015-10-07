@@ -31,4 +31,8 @@ Vec2.prototype.normalize = function(x, y) {
 	return Math.sqrt((x * x) + (y * y))
 }
 
+Vec2.prototype.copy = function() {
+	return this
+}
+
 var position = new Vec2();
