@@ -207,6 +207,15 @@ function debugCollisionsMode() {
 }
 
 /***********************************************
+					Reset Game
+***********************************************/
+function resetGame() {
+	var gameState = STATE_SPLASH;
+	var splashTimer = 2;
+	var debugCollisions = false;
+}
+
+/***********************************************
 					Framework
 ***********************************************/
 (function() {

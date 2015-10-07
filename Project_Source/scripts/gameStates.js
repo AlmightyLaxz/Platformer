@@ -61,4 +61,5 @@ function runGame(deltaTime) {
 function runGameOver(deltaTime) {
 	context.fillStyle = "#ccc";
 	context.fillRect(0, 0, canvas.width, canvas.height);
+	resetGame();
 }
