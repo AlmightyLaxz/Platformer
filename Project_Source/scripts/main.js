@@ -18,6 +18,10 @@ var LAYER_COUNT = 3;
 var LAYER_BACKGROUND = 0;
 var LAYER_PLATFORMS = 1;
 var LAYER_LADDERS = 2;
+
+var LAYER_OBJECT_ENEMIES = 3;
+var LAYER_OBJECT_TRIGGERS = 4;
+
 var MAP = {tw:60, th:15};
 var TILE = 35;
 var TILESET_TILE = TILE * 2;
@@ -25,6 +29,9 @@ var TILESET_PADDING = 2;
 var TILESET_SPACING = 2;
 var TILESET_COUNT_X = 14;
 var TILESET_COUNT_Y = 14;
+
+var ENEMY_MAXDX = METER * 5;
+var ENEMY_ACCEL = ENEMY_MAXDX * 2;
 
 var STATE_SPLASH = 0;
 var STATE_GAME = 1;
@@ -80,7 +87,7 @@ var shootTimer = 0;
 var bullets = [];
 var enemies = [];
 var enemy = new Enemy();
-enemies.push(enemy)
+enemies.push(enemy);
 
 /***********************************************
 				Delta Time Function
@@ -128,6 +135,21 @@ function initialize() {
 			}
 		}
 	}
+	
+	// add enemies
+	idx = 0;
+	for(var y = 0; y < level1.layers[LAYER_OBJECT_ENEMIES].height; y++) {
+		for(var x = 0; x < level1.layers[LAYER_OBJECT_ENEMIES].width; x++) {
+			if(level1.layers[LAYER_OBJECT_ENEMIES].data[idx] != 0) {
+				var px = tileToPixel(x);
+				var py = tileToPixel(y);
+				var e = new Enemy(px, py);
+				enemies.push(e);
+			}
+			idx++;
+		}
+	}
+	
 	musicBackground = new Howl(
 	{
 		urls: ["sound/background.ogg"],

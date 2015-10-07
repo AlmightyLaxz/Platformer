@@ -25,12 +25,30 @@ function runGame(deltaTime) {
 	}
 	
 	for (var x=0; x<bullets.length; x++) {
+		if( bullets[x].position.x - worldOffsetX < 0 || bullets[x].position.x - worldOffsetX > SCREEN_WIDTH)
+		{
+			bullets[x].alive = false;
+		}
+
 		if (bullets[x].alive == true) {
 			bullets[x].update(deltaTime);
 			bullets[x].draw();
 		}
 		else {
 			bullets.splice(x, 1);
+		}
+		
+		for (var i=0; i<enemies.length; i++) {
+			if(intersects( bullets[x].position.x, bullets[x].position.y, TILE, TILE, enemies[i].position.x, enemies[i].position.y, TILE, TILE) == true)
+			{
+				// kill both the bullet and the enemy
+				enemies.splice(x, 1);
+				enemies[x].alive = false;
+				bullets[x].alive = false;
+				// increment the player score
+				score += 1;
+				break;
+			}
 		}
 	}
 	

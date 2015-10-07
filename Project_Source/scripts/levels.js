@@ -50,40 +50,47 @@ var worldOffsetX = 0;
 function drawMap()
 {
 	var startX = -1;
-	var maxTiles = (SCREEN_WIDTH / TILE) + 2;
+	var maxTiles = Math.floor(SCREEN_WIDTH / TILE) + 2;
 	var tileX = pixelToTile(player.position.x);
-	var offsetX = TILE + (player.position.x - tileToPixel(tileX));
+	var offsetX = TILE + Math.floor(player.position.x%TILE);
 	
-	startX = tileX - ((SCREEN_WIDTH / TILE) / 2);
+	startX = tileX - Math.floor(maxTiles / 2);
 	
-	if(startX < -1) {
-		startX = -1;
-		offsetX = TILE;
+	if(startX < -1)
+	{
+		startX = 0;
+		offsetX = 0;
 	}
-	if(startX > MAP.tw - maxTiles) {
+	if(startX > MAP.tw - maxTiles)
+	{
 		startX = MAP.tw - maxTiles + 1;
 		offsetX = TILE;
 	}
-	worldOffsetX = startX * TILE + offsetX;
 
-	for(var layerIdx=0; layerIdx<LAYER_COUNT; layerIdx++)
-	{
-		for( var y = 0; y < level1.layers[layerIdx].height; y++ )
-		{
-			var idx = y * level1.layers[layerIdx].width + startX;
-			for( var x = 0; x < level1.layers[layerIdx].width; x++ )
-			{
-				if( level1.layers[layerIdx].data[idx] != 0 )
-				{
-					// the tiles in the Tiled map are base 1 (meaning a value of 0 means no tile), so subtract one from the tileset id to get the
-					// correct tile
-					var tileIndex = level1.layers[layerIdx].data[idx] - 1;
-					var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X) * (TILESET_TILE + TILESET_SPACING);
-					var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y)) * (TILESET_TILE + TILESET_SPACING);
-					context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE, x*TILE, (y-1)*TILE, TILESET_TILE, TILESET_TILE);
-				}
-				idx++;
-			}
-		}
-	}
+	worldOffsetX = startX * TILE + offsetX;
+	
+for( var layerIdx=0; layerIdx < LAYER_COUNT; layerIdx++ )
+{
+ for( var y = 0; y < level1.layers[layerIdx].height; y++ )
+ {
+var idx = y * level1.layers[layerIdx].width + startX;
+for( var x = startX; x < startX + maxTiles; x++ )
+{
+ if( level1.layers[layerIdx].data[idx] != 0 )
+ {
+ // the tiles in the Tiled map are base 1 (meaning a value of 0 means no tile),
+ // so subtract one from the tileset id to get the
+ // correct tile
+ var tileIndex = level1.layers[layerIdx].data[idx] - 1;
+ var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X) *
+(TILESET_TILE + TILESET_SPACING);
+ var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y)) *
+(TILESET_TILE + TILESET_SPACING);
+ context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE,
+(x-startX)*TILE - offsetX, (y-1)*TILE, TILESET_TILE, TILESET_TILE);
+ }
+ idx++;
+}
+ }
+}
 }
