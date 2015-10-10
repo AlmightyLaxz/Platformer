@@ -8,7 +8,7 @@ var Enemy = function() {
 	this.sprite.setAnimationOffset(0, -35, -40);
 	
 	this.position = new Vec2();
-	this.position.set(x, y);
+	this.position.set(9*TILE, 0*TILE);
 	
 	this.velocity = new Vec2();
 	

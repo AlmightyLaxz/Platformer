@@ -137,7 +137,7 @@ function initialize() {
 	}
 	
 	// add enemies
-	idx = 0;
+	/*idx = 0;
 	for(var y = 0; y < level1.layers[LAYER_OBJECT_ENEMIES].height; y++) {
 		for(var x = 0; x < level1.layers[LAYER_OBJECT_ENEMIES].width; x++) {
 			if(level1.layers[LAYER_OBJECT_ENEMIES].data[idx] != 0) {
@@ -148,7 +148,7 @@ function initialize() {
 			}
 			idx++;
 		}
-	}
+	}*/
 	
 	musicBackground = new Howl(
 	{
