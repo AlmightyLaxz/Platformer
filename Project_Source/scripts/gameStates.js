@@ -7,12 +7,11 @@ var splash = [];
 
 function runSplash(deltaTime) {
 	splash.image = document.createElement("img");
-	splash.image.src = "art/bullet.png";
+	splash.image.src = "art/platformer-splash.png";
 	context.save();
 	context.drawImage(splash.image, 0, 0);
 	context.restore();
-	if (splashTimer > 0) {splashTimer -= deltaTime;}
-	else {gameState = STATE_GAME; splashTimer = 2;}
+	if (keyboard.isKeyDown(keyboard.KEY_SPACE)) {gameState = STATE_GAME;}
 }
 
 // Function for running game
@@ -21,40 +20,37 @@ function runGame(deltaTime) {
 	if(debugCollisions == false) {
 		player.draw();
 		drawMap();
-		enemy.draw();
 	}
 	
-	for (var x=0; x<bullets.length; x++) {
-		if( bullets[x].position.x - worldOffsetX < 0 || bullets[x].position.x - worldOffsetX > SCREEN_WIDTH)
-		{
-			bullets[x].alive = false;
+	for(var i=0; i<bullets.length; i++) {
+		bullets[i].update(deltaTime);
+		if (bullets[i].position.x - worldOffsetX < 0 || bullets[i].position.x - worldOffsetX > SCREEN_WIDTH) {
+			bullets[i].alive = false;
 		}
-
-		if (bullets[x].alive == true) {
-			bullets[x].update(deltaTime);
-			bullets[x].draw();
-		}
-		else {
-			bullets.splice(x, 1);
-		}
-		
-		for (var i=0; i<enemies.length; i++) {
-			if(intersects( bullets[x].position.x, bullets[x].position.y, TILE, TILE, enemies[i].position.x, enemies[i].position.y, TILE, TILE) == true)
-			{
+		for(var j=0; j<enemies.length; j++) {
+			if(intersects( bullets[i].position.x, bullets[i].position.y, TILE, TILE, enemies[j].position.x, enemies[j].position.y, TILE, TILE) == true) {
 				// kill both the bullet and the enemy
-				enemies.splice(x, 1);
-				enemies[x].alive = false;
-				bullets[x].alive = false;
+				enemies.splice(j, 1);
+				bullets[i].alive = false;
 				// increment the player score
-				score += 1;
+				player.score += 1;
 				break;
 			}
 		}
+		if(bullets[i].alive == false) {
+			bullets.splice(i, 1);
+			break;
+		}
 	}
+
 	
 	for (var x=0; x<enemies.length; x++) {
 		enemies[x].update(deltaTime);
 		enemies[x].draw();
+		
+		/*if(intersects(player.position.x, player.position.y, TILE, TILE, enemies[x].position.x, enemies[x].position.y, TILE, TILE) == true) {
+				player.alive = false;
+		}*/
 	}
 	
 	if (keyboard.isKeyDown(keyboard.KEY_M)) {

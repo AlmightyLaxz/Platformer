@@ -41,11 +41,9 @@ var Player = function() {
 };
 
 Player.prototype.shoot = function() {
-	if (shootTimer <= 0) {
-		var bullet = new Bullet();
+		if (this.direction == LEFT) {rightorleft = false;} else {rightorleft = true;}
+		var bullet = new Bullet(this.position.x, this.position.y, rightorleft);
 		bullets.push(bullet);
-		shootTimer = 0.15;
-	}
 }
 
 Player.prototype.left = function(deltaTime) {
@@ -199,9 +197,12 @@ Player.prototype.update = function(deltaTime)
 			this.position.x = tileToPixel(tx + 1);
 			this.velocity.x = 0; // stop horizontal velocity
 		}
-}
+	}
 
-
+	if(cellAtTileCoord(LAYER_OBJECT_TRIGGERS, tx, ty) == true)
+	{
+		gameState = STATE_GAMEOVER;
+	}
 }
 
 Player.prototype.draw = function()

@@ -2,13 +2,13 @@
 				Enemy Object
 ***********************************************/
 
-var Enemy = function() {
+var Enemy = function(x, y) {
 	this.sprite = new Sprite("art/enemy.png");
 	this.sprite.buildAnimation(2, 1, 88, 94, 0.3, [0,1]);
 	this.sprite.setAnimationOffset(0, -35, -40);
 	
 	this.position = new Vec2();
-	this.position.set(9*TILE, 0*TILE);
+	this.position.set(x, y);
 	
 	this.velocity = new Vec2();
 	
@@ -20,15 +20,16 @@ var Enemy = function() {
 
 Enemy.prototype.update = function(deltaTime)
 {
-	this.sprite.update(dt);
+	this.sprite.update(deltaTime);
 	
 	if(this.pause > 0)
 	{
-		this.pause -= dt;
+		this.pause -= deltaTime;
 	}
 	else
 	{
 		var ddx = 0; // acceleration
+		
 		var tx = pixelToTile(this.position.x);
 		var ty = pixelToTile(this.position.y);
 		var nx = (this.position.x)%TILE; // true if enemy overlaps right
@@ -37,6 +38,7 @@ Enemy.prototype.update = function(deltaTime)
 		var cellright = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty);
 		var celldown = cellAtTileCoord(LAYER_PLATFORMS, tx, ty + 1);
 		var celldiag = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty + 1);
+		
 		if(this.moveRight)
 		{
 			if(celldiag && !cellright) {
@@ -48,6 +50,7 @@ Enemy.prototype.update = function(deltaTime)
 				this.pause = 0.5;
 			}
 		}
+		
 		if(!this.moveRight)
 		{
 			if(celldown && !cell) {
@@ -59,17 +62,14 @@ Enemy.prototype.update = function(deltaTime)
 					this.pause = 0.5;
 				}
 		}
-		this.position.x = Math.floor(this.position.x + (dt * this.velocity.x));
-		this.velocity.x = bound(this.velocity.x + (dt * ddx),
+		this.position.x = Math.floor(this.position.x + (deltaTime * this.velocity.x));
+		this.velocity.x = bound(this.velocity.x + (deltaTime * ddx),
 		-ENEMY_MAXDX, ENEMY_MAXDX);
 	}
 }
 
 Enemy.prototype.draw = function()
 {
-	context.save();
-	context.translate(this.x, this.y);
-	context.rotate(this.rotation);
-	context.drawImage(this.image, -this.width/2, -this.height/2);
-	context.restore();
+	var screenX = this.position.x - worldOffsetX;
+	this.sprite.draw(context, screenX, this.position.y);
 }

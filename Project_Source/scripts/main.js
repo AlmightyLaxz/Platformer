@@ -38,8 +38,6 @@ var STATE_GAME = 1;
 var STATE_GAMEOVER = 2;
 var gameState = STATE_SPLASH;
 
-var splashTimer = 2;
-
 var debugCollisions = false;
 
 var PLAYER_SPEED = 1;
@@ -86,8 +84,6 @@ var shootTimer = 0;
 
 var bullets = [];
 var enemies = [];
-var enemy = new Enemy();
-enemies.push(enemy);
 
 /***********************************************
 				Delta Time Function
@@ -137,7 +133,7 @@ function initialize() {
 	}
 	
 	// add enemies
-	/*idx = 0;
+	idx = 0;
 	for(var y = 0; y < level1.layers[LAYER_OBJECT_ENEMIES].height; y++) {
 		for(var x = 0; x < level1.layers[LAYER_OBJECT_ENEMIES].width; x++) {
 			if(level1.layers[LAYER_OBJECT_ENEMIES].data[idx] != 0) {
@@ -148,8 +144,29 @@ function initialize() {
 			}
 			idx++;
 		}
-	}*/
+	}
+	// initialize trigger layer in collision map
+	cells[LAYER_OBJECT_TRIGGERS] = [];
+	idx = 0;
+	for(var y = 0; y < level1.layers[LAYER_OBJECT_TRIGGERS].height; y++) {
+		cells[LAYER_OBJECT_TRIGGERS][y] = [];
+		for(var x = 0; x < level1.layers[LAYER_OBJECT_TRIGGERS].width; x++) {
+			if(level1.layers[LAYER_OBJECT_TRIGGERS].data[idx] != 0) {
+				cells[LAYER_OBJECT_TRIGGERS][y][x] = 1;
+				cells[LAYER_OBJECT_TRIGGERS][y-1][x] = 1;
+				cells[LAYER_OBJECT_TRIGGERS][y-1][x+1] = 1;
+				cells[LAYER_OBJECT_TRIGGERS][y][x+1] = 1;
+			}
+			else if(cells[LAYER_OBJECT_TRIGGERS][y][x] != 1) {
+				// if we haven't set this cell's value, then set it to 0 now
+				cells[LAYER_OBJECT_TRIGGERS][y][x] = 0;
+			}
+			idx++;
+		}
+	}
+
 	
+	// sound objects using howl library
 	musicBackground = new Howl(
 	{
 		urls: ["sound/background.ogg"],
@@ -233,7 +250,6 @@ function debugCollisionsMode() {
 ***********************************************/
 function resetGame() {
 	var gameState = STATE_SPLASH;
-	var splashTimer = 2;
 	var debugCollisions = false;
 }
 

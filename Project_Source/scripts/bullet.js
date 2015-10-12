@@ -23,10 +23,10 @@ var Bullet = function(x, y, moveRight)
 	this.alive = true;
 }
 
-Bullet.prototype.update = function(dt)
+Bullet.prototype.update = function(deltaTime)
 {
-	this.sprite.update(dt);
-	this.position.x = Math.floor(this.position.x + (dt * this.velocity.x));
+	this.sprite.update(deltaTime);
+	this.position.x = Math.floor(this.position.x + (deltaTime * this.velocity.x));
 }
 
 Bullet.prototype.draw = function()
