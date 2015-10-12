@@ -4,6 +4,8 @@
 
 // Splash Screen
 var splash = [];
+// Game Over Screen
+var gameover = [];
 
 function runSplash(deltaTime) {
 	splash.image = document.createElement("img");
@@ -16,9 +18,9 @@ function runSplash(deltaTime) {
 
 // Function for running game
 function runGame(deltaTime) {
+	drawMap();
 	player.update(deltaTime);
 	player.draw();
-	drawMap();
 	for (var x=0; x<enemies.length; x++) {
 		enemies[x].update(deltaTime);
 		enemies[x].draw();
@@ -70,7 +72,10 @@ function runGame(deltaTime) {
 
 // Game over function
 function runGameOver(deltaTime) {
-	context.fillStyle = "#ccc";
-	context.fillRect(0, 0, canvas.width, canvas.height);
+	gameover.image = document.createElement("img");
+	gameover.image.src = "art/platformer-gameover.png";
+	context.save();
+	context.drawImage(gameover.image, 0, 0);
+	context.restore();
 	resetGame();
 }

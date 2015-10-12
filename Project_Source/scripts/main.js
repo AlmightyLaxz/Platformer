@@ -14,13 +14,12 @@ var SCREEN_WIDTH = canvas.width;
 var SCREEN_HEIGHT = canvas.height;
 
 // Map related constants
-var LAYER_COUNT = 3;
+var LAYER_COUNT = 2;
 var LAYER_BACKGROUND = 0;
 var LAYER_PLATFORMS = 1;
-var LAYER_LADDERS = 2;
 
-var LAYER_OBJECT_ENEMIES = 3;
-var LAYER_OBJECT_TRIGGERS = 4;
+var LAYER_OBJECT_ENEMIES = 2;
+var LAYER_OBJECT_TRIGGERS = 3;
 
 var MAP = {tw:60, th:15};
 var TILE = 35;
@@ -70,7 +69,9 @@ var ANIM_WALK_LEFT = 2;
 var ANIM_IDLE_RIGHT = 3;
 var ANIM_JUMP_RIGHT = 4;
 var ANIM_WALK_RIGHT = 5;
-var ANIM_MAX = 6;
+var ANIM_SHOOT_LEFT = 6;
+var ANIM_SHOOT_RIGHT = 7;
+var ANIM_MAX = 8;
 
 // frames per second variables
 var fps = 0;

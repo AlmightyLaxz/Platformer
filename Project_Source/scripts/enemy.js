@@ -70,6 +70,6 @@ Enemy.prototype.update = function(deltaTime)
 
 Enemy.prototype.draw = function()
 {
-	var screenX = this.position.x - worldOffsetX;
-	this.sprite.draw(context, screenX, this.position.y);
+	var screenX = this.position.x - worldOffsetX + 25;
+	this.sprite.draw(context, screenX, this.position.y + 25);
 }
