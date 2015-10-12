@@ -17,10 +17,17 @@ function runSplash(deltaTime) {
 // Function for running game
 function runGame(deltaTime) {
 	player.update(deltaTime);
-	if(debugCollisions == false) {
-		player.draw();
-		drawMap();
+	player.draw();
+	drawMap();
+	for (var x=0; x<enemies.length; x++) {
+		enemies[x].update(deltaTime);
+		enemies[x].draw();
+		
+		if(intersects(player.position.x, player.position.y, TILE, TILE, enemies[x].position.x, enemies[x].position.y, TILE, TILE) == true) {
+				player.alive = false;
+		}
 	}
+
 	
 	for(var i=0; i<bullets.length; i++) {
 		bullets[i].update(deltaTime);
@@ -47,26 +54,6 @@ function runGame(deltaTime) {
 		bullets[i].draw();
 	}
 	
-	for (var x=0; x<enemies.length; x++) {
-		enemies[x].update(deltaTime);
-		enemies[x].draw();
-		
-		if(intersects(player.position.x, player.position.y, TILE, TILE, enemies[x].position.x, enemies[x].position.y, TILE, TILE) == true) {
-				player.alive = false;
-		}
-	}
-	
-	if (keyboard.isKeyDown(keyboard.KEY_M)) {
-		debugCollisions = true;
-	}
-	
-	if (keyboard.isKeyUp(keyboard.KEY_M)) {
-		debugCollisions = false;
-	}
-	
-	if (debugCollisions == true) {
-		debugCollisionsMode();
-	}
 	
 	// player death handling
 	if (player.alive == false) {

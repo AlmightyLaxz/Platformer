@@ -38,14 +38,15 @@ var Player = function() {
 	this.direction = LEFT;
 	this.lives = 3;
 	this.score = 0;
+	this.shootTimer = 0;
 };
 
 Player.prototype.shoot = function() {
-		if (shootTimer <= 0 && Player.shooting == false) {
+		if (this.shootTimer <= 0 && Player.shooting == false) {
 			if (this.direction == LEFT) {rightorleft = false;} else {rightorleft = true;}
 			var bullet = new Bullet(this.position.x, this.position.y, rightorleft);
 			bullets.push(bullet);
-			shootTimer = 0.15;
+			this.shootTimer = 0.15;
 		}
 }
 
@@ -64,7 +65,7 @@ Player.prototype.update = function(deltaTime)
 	var right = false;
 	var jump = false;
 	
-	shootTimer -= deltaTime;
+	this.shootTimer -= deltaTime;
 	
 	// check keypress events
 	if(keyboard.isKeyUp(keyboard.KEY_W) == true) {
@@ -202,7 +203,7 @@ Player.prototype.update = function(deltaTime)
 		}
 	}
 
-	if(cellAtTileCoord(LAYER_OBJECT_TRIGGERS, tx, ty) == true)
+	if(ty > MAP.th && cellAtTileCoord(LAYER_OBJECT_TRIGGERS, tx, ty) == true)
 	{
 		gameState = STATE_GAMEOVER;
 	}

@@ -9,16 +9,22 @@ var Bullet = function(x, y, moveRight)
 	this.sprite.setAnimationOffset(0, 0, 0);
 	this.sprite.setLoop(0, false);
 	
-	this.position = new Vec2();
-	this.position.set(x, y);
+	this.offsetAmount = 70;
+	
+	this.moveRight = moveRight;
 	
 	this.velocity = new Vec2();
 	
-	this.moveRight = moveRight;
-	if(this.moveRight == true)
+	if(this.moveRight == true) {
 		this.velocity.set(MAXDX *2, 0);
-	else
+	}
+	else {
 		this.velocity.set(-MAXDX *2, 0);
+		this.offsetAmount = -30;
+	}
+	
+	this.position = new Vec2();
+	this.position.set(x + this.offsetAmount, y);
 	
 	this.alive = true;
 }

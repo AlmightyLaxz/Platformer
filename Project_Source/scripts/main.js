@@ -30,13 +30,13 @@ var TILESET_SPACING = 2;
 var TILESET_COUNT_X = 14;
 var TILESET_COUNT_Y = 14;
 
+// game state constants
 var STATE_SPLASH = 0;
 var STATE_GAME = 1;
 var STATE_GAMEOVER = 2;
 var gameState = STATE_SPLASH;
 
-var debugCollisions = false;
-
+// player speed constants
 var PLAYER_SPEED = 1;
 var BULLET_SPEED = 6;
 
@@ -55,13 +55,15 @@ var FRICTION = MAXDX * 10;
  // (a large) instantaneous jump impulse
 var JUMP = METER * 1500;
 
-
+// player movement variables
 var ENEMY_MAXDX = METER * 5;
 var ENEMY_ACCEL = ENEMY_MAXDX * 2;
 
+// player directions
 var LEFT = 0;
 var RIGHT = 1;
 
+// player animation constants
 var ANIM_IDLE_LEFT = 0;
 var ANIM_JUMP_LEFT = 1;
 var ANIM_WALK_LEFT = 2;
@@ -70,10 +72,12 @@ var ANIM_JUMP_RIGHT = 4;
 var ANIM_WALK_RIGHT = 5;
 var ANIM_MAX = 6;
 
+// frames per second variables
 var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
 
+// sound effects and music
 var musicBackground;
 var sfxFire;
 
@@ -81,8 +85,12 @@ var sfxFire;
 var player = new Player();
 var keyboard = new Keyboard();
 
-var shootTimer = 0;
+// current level stuff
+var currentLevel = level1;
+var levelId = 1;
 
+
+// Object arrays
 var bullets = [];
 var enemies = [];
 
@@ -112,10 +120,10 @@ function initialize() {
 	for(var layerIdx = 0; layerIdx < LAYER_COUNT; layerIdx++) { // initialize the collision map
 		cells[layerIdx] = [];
 		var idx = 0;
-		for(var y = 0; y < level1.layers[layerIdx].height; y++) {
+		for(var y = 0; y < currentLevel.layers[layerIdx].height; y++) {
 			cells[layerIdx][y] = [];
-			for(var x = 0; x < level1.layers[layerIdx].width; x++) {
-				if(level1.layers[layerIdx].data[idx] != 0) {
+			for(var x = 0; x < currentLevel.layers[layerIdx].width; x++) {
+				if(currentLevel.layers[layerIdx].data[idx] != 0) {
 					// for each tile we find in the layer data, we need to create 4 collisions
 					// (because our collision squares are 35x35 but the tile in the
 					// level are 70x70)
@@ -135,9 +143,9 @@ function initialize() {
 	
 	// add enemies
 	idx = 0;
-	for(var y = 0; y < level1.layers[LAYER_OBJECT_ENEMIES].height; y++) {
-		for(var x = 0; x < level1.layers[LAYER_OBJECT_ENEMIES].width; x++) {
-			if(level1.layers[LAYER_OBJECT_ENEMIES].data[idx] != 0) {
+	for(var y = 0; y < currentLevel.layers[LAYER_OBJECT_ENEMIES].height; y++) {
+		for(var x = 0; x < currentLevel.layers[LAYER_OBJECT_ENEMIES].width; x++) {
+			if(currentLevel.layers[LAYER_OBJECT_ENEMIES].data[idx] != 0) {
 				var px = tileToPixel(x);
 				var py = tileToPixel(y);
 				var e = new Enemy(px, py);
@@ -149,10 +157,10 @@ function initialize() {
 	// initialize trigger layer in collision map
 	cells[LAYER_OBJECT_TRIGGERS] = [];
 	idx = 0;
-	for(var y = 0; y < level1.layers[LAYER_OBJECT_TRIGGERS].height; y++) {
+	for(var y = 0; y < currentLevel.layers[LAYER_OBJECT_TRIGGERS].height; y++) {
 		cells[LAYER_OBJECT_TRIGGERS][y] = [];
-		for(var x = 0; x < level1.layers[LAYER_OBJECT_TRIGGERS].width; x++) {
-			if(level1.layers[LAYER_OBJECT_TRIGGERS].data[idx] != 0) {
+		for(var x = 0; x < currentLevel.layers[LAYER_OBJECT_TRIGGERS].width; x++) {
+			if(currentLevel.layers[LAYER_OBJECT_TRIGGERS].data[idx] != 0) {
 				cells[LAYER_OBJECT_TRIGGERS][y][x] = 1;
 				cells[LAYER_OBJECT_TRIGGERS][y-1][x] = 1;
 				cells[LAYER_OBJECT_TRIGGERS][y-1][x+1] = 1;
@@ -217,41 +225,10 @@ function main()
 initialize();
 
 /***********************************************
-					Debug
-***********************************************/
-function debugCollisionsMode() {
-	// draw the player collisions
-	context.fillStyle = "#FF0";
-	context.fillRect(player.position.x, player.position.y, TILE, TILE);
-
-	// draw the collision map
-	context.fillStyle = "#f00";
-	for (var i = 0; i < cells.length; ++i) {
-		if (i != 1) continue;
-		var layer = cells[i];
-		for (var y = 0; y < layer.length; ++y) {
-			var row = layer[y];
-			for (var x = 0; x < row.length; ++x) {
-				var cell = row[x];
-				if (cell) {
-					context.fillRect(x * TILE - 1, y * TILE - 1, TILE - 2, TILE - 2);
-				}
-			}
-		}
-	}
-	
-	context.fillStyle = "#7FFF00";
-	for (var i = 0; i < bullets.length; ++i) {
-		context.fillRect(bullets[i].position.x, bullets[i].position.y, 10, 10);
-	}
-}
-
-/***********************************************
 					Reset Game
 ***********************************************/
 function resetGame() {
 	var gameState = STATE_SPLASH;
-	var debugCollisions = false;
 }
 
 /***********************************************
