@@ -30,9 +30,6 @@ var TILESET_SPACING = 2;
 var TILESET_COUNT_X = 14;
 var TILESET_COUNT_Y = 14;
 
-var ENEMY_MAXDX = METER * 5;
-var ENEMY_ACCEL = ENEMY_MAXDX * 2;
-
 var STATE_SPLASH = 0;
 var STATE_GAME = 1;
 var STATE_GAMEOVER = 2;
@@ -57,6 +54,10 @@ var ACCEL = MAXDX * 4;
 var FRICTION = MAXDX * 10;
  // (a large) instantaneous jump impulse
 var JUMP = METER * 1500;
+
+
+var ENEMY_MAXDX = METER * 5;
+var ENEMY_ACCEL = ENEMY_MAXDX * 2;
 
 var LEFT = 0;
 var RIGHT = 1;

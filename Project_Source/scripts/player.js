@@ -41,9 +41,12 @@ var Player = function() {
 };
 
 Player.prototype.shoot = function() {
-		if (this.direction == LEFT) {rightorleft = false;} else {rightorleft = true;}
-		var bullet = new Bullet(this.position.x, this.position.y, rightorleft);
-		bullets.push(bullet);
+		if (shootTimer <= 0 && Player.shooting == false) {
+			if (this.direction == LEFT) {rightorleft = false;} else {rightorleft = true;}
+			var bullet = new Bullet(this.position.x, this.position.y, rightorleft);
+			bullets.push(bullet);
+			shootTimer = 0.15;
+		}
 }
 
 Player.prototype.left = function(deltaTime) {

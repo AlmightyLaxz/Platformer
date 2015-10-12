@@ -27,6 +27,12 @@ Bullet.prototype.update = function(deltaTime)
 {
 	this.sprite.update(deltaTime);
 	this.position.x = Math.floor(this.position.x + (deltaTime * this.velocity.x));
+	var tx = pixelToTile(this.position.x);
+	var ty = pixelToTile(this.position.y);
+	if	(cellAtTileCoord(LAYER_PLATFORMS, tx, ty) == true)
+	{
+		this.alive = false;
+	}
 }
 
 Bullet.prototype.draw = function()

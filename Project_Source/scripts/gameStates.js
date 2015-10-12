@@ -43,14 +43,17 @@ function runGame(deltaTime) {
 		}
 	}
 
+	for(var i=0; i<bullets.length; i++) {
+		bullets[i].draw();
+	}
 	
 	for (var x=0; x<enemies.length; x++) {
 		enemies[x].update(deltaTime);
 		enemies[x].draw();
 		
-		/*if(intersects(player.position.x, player.position.y, TILE, TILE, enemies[x].position.x, enemies[x].position.y, TILE, TILE) == true) {
+		if(intersects(player.position.x, player.position.y, TILE, TILE, enemies[x].position.x, enemies[x].position.y, TILE, TILE) == true) {
 				player.alive = false;
-		}*/
+		}
 	}
 	
 	if (keyboard.isKeyDown(keyboard.KEY_M)) {
