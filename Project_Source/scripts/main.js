@@ -116,6 +116,10 @@ function getDeltaTime()
 	return deltaTime;
 }
 
+/***********************************************
+				Initialisation
+***********************************************/
+
 var cells = []; // the array that holds our simplified collision data
 function initialize() {
 	for(var layerIdx = 0; layerIdx < LAYER_COUNT; layerIdx++) { // initialize the collision map
@@ -176,7 +180,9 @@ function initialize() {
 	}
 
 	
-	// sound objects using howl library
+	/***********************************************
+						Howl Sounds
+	***********************************************/
 	musicBackground = new Howl(
 	{
 		urls: ["sound/background.ogg"],
