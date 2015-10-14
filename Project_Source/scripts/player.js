@@ -216,6 +216,8 @@ Player.prototype.update = function(deltaTime)
 	if(cellAtTileCoord(LAYER_OBJECT_TRIGGERS, tx, ty) == true && player.position.y > 0 && player.position.x > 0)
 	{
 		gameState = STATE_GAMEOVER;
+		//currentLevel = level2;
+		//levelId = 2;
 	}
 }
 
