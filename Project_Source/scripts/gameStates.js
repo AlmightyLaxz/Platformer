@@ -77,5 +77,7 @@ function runGameOver(deltaTime) {
 	context.save();
 	context.drawImage(gameover.image, 0, 0);
 	context.restore();
-	resetGame();
+	context.fillStyle = "#000";
+	context.font="32px Arial";
+	context.fillText("Final Score: " + player.score, 220, 300, 1000);
 }

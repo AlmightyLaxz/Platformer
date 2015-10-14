@@ -38,7 +38,7 @@ var Player = function() {
 };
 
 Player.prototype.shoot = function() {
-		if (this.shootTimer <= 0 && Player.shooting == false) {
+		if (this.shootTimer <= 0) {
 			if (this.direction == LEFT) {rightorleft = false;} else {rightorleft = true;}
 			var bullet = new Bullet(this.position.x, this.position.y, rightorleft);
 			bullets.push(bullet);
@@ -71,19 +71,19 @@ Player.prototype.update = function(deltaTime)
 	if(keyboard.isKeyDown(keyboard.KEY_A) == true) {
 	left = true;
 	this.direction = LEFT;
-	if(this.sprite.currentAnimation != ANIM_WALK_LEFT && this.jumping == false) {this.sprite.setAnimation(ANIM_WALK_LEFT);}
+	if(this.sprite.currentAnimation != ANIM_WALK_LEFT && this.jumping == false && this.shooting == false) {this.sprite.setAnimation(ANIM_WALK_LEFT);}
 	}
 	else if(keyboard.isKeyDown(keyboard.KEY_D) == true) {
 	right = true;
 	this.direction = RIGHT;
-	if(this.sprite.currentAnimation != ANIM_WALK_RIGHT && this.jumping == false) {this.sprite.setAnimation(ANIM_WALK_RIGHT);}
+	if(this.sprite.currentAnimation != ANIM_WALK_RIGHT && this.jumping == false && this.shooting == false) {this.sprite.setAnimation(ANIM_WALK_RIGHT);}
 	}
 	else {
-		if(this.jumping == false && this.falling == false) {
+		if(this.jumping == false && this.falling == false && this.shooting == false) {
 			if(this.direction == LEFT) {
-				if(this.sprite.currentAnimation != ANIM_IDLE_LEFT) {this.sprite.setAnimation(ANIM_IDLE_LEFT);}
+				if(this.sprite.currentAnimation != ANIM_IDLE_LEFT && this.shooting == false) {this.sprite.setAnimation(ANIM_IDLE_LEFT);}
 			}
-			else if(this.sprite.currentAnimation != ANIM_IDLE_RIGHT) {
+			else if(this.sprite.currentAnimation != ANIM_IDLE_RIGHT && this.shooting == false) {
 				this.sprite.setAnimation(ANIM_IDLE_RIGHT);
 			}
 		}
@@ -138,11 +138,11 @@ Player.prototype.update = function(deltaTime)
 	
 	if (keyboard.isKeyDown(keyboard.KEY_SPACE) == true) {
 		this.shoot();
-		Player.shooting = true;
+		this.shooting = true;
 		sfxFire.play();
 	}
-	else {
-		Player.shooting = false;
+	if (keyboard.isKeyUp(keyboard.KEY_SPACE) == true) {
+		this.shooting = false;
 	}
 	
 	// collision detection
@@ -201,16 +201,19 @@ Player.prototype.update = function(deltaTime)
 		}
 	}
 	
-	if (Player.shooting == true && this.shootTimer != 0) {
+	if (this.shooting == true && this.sprite.currentAnimation != ANIM_SHOOT_LEFT) {
 		if (this.direction == LEFT) {
 			this.sprite.setAnimation(ANIM_SHOOT_LEFT);
 		}
-		else {
+	}
+	
+	if (this.shooting == true && this.sprite.currentAnimation != ANIM_SHOOT_RIGHT) {
+		if (this.direction == RIGHT) {
 			this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
 		}
 	}
 
-	if(cellAtTileCoord(LAYER_OBJECT_TRIGGERS, tx, ty) == true)
+	if(cellAtTileCoord(LAYER_OBJECT_TRIGGERS, tx, ty) == true && player.position.y > 0 && player.position.x > 0)
 	{
 		gameState = STATE_GAMEOVER;
 	}
